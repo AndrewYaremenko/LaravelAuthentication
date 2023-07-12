@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
@@ -23,11 +24,9 @@ class RegisterController extends Controller
             'password' => ['required', 'confirmed', 'min:5', 'max:32']
         ]);
 
-        $user = User::create([
-            'name' => request()->name,
-            'email' => request()->email,
-            'password' => Hash::make(request()->password)
-        ]);
+        $validatedDate['password'] = Hash::make($validatedDate['password']);
+
+        $user = User::create($validatedDate);
 
         Auth::login($user);
 

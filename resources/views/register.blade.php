@@ -5,12 +5,12 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title text-center mb-4">Authentication</h5>
-                    <form action="{{ route('register') }}" method="POST" novalidate>
+                    <form action="{{ route('register') }}" method="POST">
                         @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" name="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" id="email" placeholder="name"
-                                value="{{ old('name') }}" required>
+                            <input type="text" name="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" id="name" placeholder="name"
+                                value="{{ old('name') }}" required autofocus>
                             @error('name')
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
@@ -33,7 +33,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Confirm password</label>
-                            <input type="password"name="password_confirmation" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="confirm_password"
+                            <input type="password" name="password_confirmation" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="confirm_password"
                                 placeholder="сonfirm password" required>
                         </div>
                         <div class="d-grid">
