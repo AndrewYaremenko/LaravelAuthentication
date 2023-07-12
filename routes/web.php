@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::view('/', 'home')->name('home');
-Route::view('/login', 'login')->name('login');
-Route::view('/register', 'register')->name('register');
+
+Route::view('/login', 'login')->middleware('guest')->name('login');
+Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
+Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register');
+
+Route::view('/news', 'news')->middleware('auth')->name('news');

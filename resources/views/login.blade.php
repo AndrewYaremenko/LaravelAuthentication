@@ -6,6 +6,7 @@
                 <div class="card-body">
                     <h5 class="card-title text-center mb-4">Authentication</h5>
                     <form>
+                        @csrf
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" placeholder="email" required>
