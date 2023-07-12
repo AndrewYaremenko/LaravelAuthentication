@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
@@ -21,12 +22,12 @@ class LoginController extends Controller
             'password' => ['required', 'string']
         ]);
 
-        if (Auth::attempt($credentials)) {
-            return redirect()->route('news');
-        }
+        if (!Auth::attempt($credentials)) {
+            throw ValidationException::withMessages([
+                'email' => 'These credentials do not match our records.'
+            ]);
+        }   
 
-        return back()->withInput()->withErrors([
-            'email'=>'These credentials do not match our records.'
-        ]);
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 }
