@@ -15,7 +15,11 @@
                         <a class="nav-link" href=" {{ route('news') }} ">News</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Logout</a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <a class="nav-link" href="{{ route('logout') }}"
+                                onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                        </form>
                     </li>
                 @endauth
                 @guest
