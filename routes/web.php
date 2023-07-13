@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\EmailVerificationNotationController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\EmailVerificationPromtController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -32,19 +35,8 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])->mid
 Route::get('/reset-password', [ResetPasswordController::class, 'create'])->middleware('guest')->name('password.reset');
 Route::post('/reset-password', [ResetPasswordController::class, 'store'])->middleware('guest')->name('password.update');
 
-Route::get('/email/verify', function () {
-    return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
-Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
-    $request->fulfill();
-
-    return redirect()->intended(RouteServiceProvider::HOME);
-})->middleware(['auth', 'signed'])->name('verification.verify');
-Route::post('/email/verification-notification', function () {
-    request()->user()->sendEmailVerificationNotification();
-    
-    return back()->with('status', 'Verification link sent!');
-})->middleware('auth')->name('verification.send');
-
+Route::get('/email/verify', [EmailVerificationPromtController::class, '__invoke'])->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post('/email/verification-notification', [EmailVerificationNotationController::class, '__invoke'])->middleware('auth')->name('verification.send');
 
 Route::view('/news', 'news')->middleware(['auth', 'verified'])->name('news');
