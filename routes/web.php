@@ -36,6 +36,11 @@ Route::get('/email/verify', function () {
 Route::get('/email/verify/{id}/{hash}', function () {
     return 'verify';
 })->middleware(['auth', 'signed'])->name('verification.verify');
+Route::post('/email/verification-notification', function () {
+    request()->user()->sendEmailVerificationNotification();
+    
+    return back()->with('status', 'Verification link sent!');
+})->middleware('auth')->name('verification.send');
 
 
 Route::view('/news', 'news')->middleware(['auth', 'verified'])->name('news');

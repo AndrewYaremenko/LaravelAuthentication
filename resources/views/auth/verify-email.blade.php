@@ -5,7 +5,12 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title text-center mb-4">Verification</h5>
-                    <form action="#" method="POST" novalidate>
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+                    <form action="{{route('verification.send')}}" method="POST" novalidate>
                         @csrf
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Reset verification link</button>
