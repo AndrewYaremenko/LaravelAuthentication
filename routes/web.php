@@ -27,6 +27,6 @@ Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')-
 Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])->middleware('guest')->name('password.request');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])->middleware('guest')->name('password.request');
 Route::get('/reset-password', [ResetPasswordController::class, 'create'])->middleware('guest')->name('password.reset');
-Route::post('/reset-password', [ResetPasswordController::class, 'store'])->middleware('guest')->name('password.reset'); 
+Route::post('/reset-password', [ResetPasswordController::class, 'store'])->middleware('guest')->name('password.update'); 
 
 Route::view('/news', 'news')->middleware('auth')->name('news');

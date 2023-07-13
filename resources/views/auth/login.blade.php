@@ -5,6 +5,11 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title text-center mb-4">Authentication</h5>
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
                     <form action="{{ route('login') }}" method="POST" novalidate>
                         @csrf
                         <div class="mb-3">
