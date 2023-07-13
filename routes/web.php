@@ -24,9 +24,18 @@ Route::post('/register', [RegisterController::class, 'store'])->middleware('gues
 Route::get('/login', [LoginController::class, 'create'])->middleware('guest')->name('login');
 Route::post('/login', [LoginController::class, 'store'])->middleware('guest')->name('login');
 Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
+
 Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])->middleware('guest')->name('password.request');
 Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])->middleware('guest')->name('password.request');
 Route::get('/reset-password', [ResetPasswordController::class, 'create'])->middleware('guest')->name('password.reset');
-Route::post('/reset-password', [ResetPasswordController::class, 'store'])->middleware('guest')->name('password.update'); 
+Route::post('/reset-password', [ResetPasswordController::class, 'store'])->middleware('guest')->name('password.update');
 
-Route::view('/news', 'news')->middleware('auth')->name('news');
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+Route::get('/email/verify/{id}/{hash}', function () {
+    return 'verify';
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+
+Route::view('/news', 'news')->middleware(['auth', 'verified'])->name('news');
