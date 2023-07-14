@@ -41,9 +41,7 @@ Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke
 Route::post('/email/verification-notification', [EmailVerificationNotationController::class, '__invoke'])->middleware('auth')->name('verification.send');
 
 Route::view('/news', 'news')->middleware(['auth', 'verified'])->name('news');
-Route::get('/prifle', function () {
-    return 'protected area';
-})->middleware(['auth', 'verified', 'password.confirm'])->name('profile');   
+Route::view('/profile', 'profile')->middleware(['auth', 'verified', 'password.confirm'])->name('profile');   
 
 Route::get('/password-confirm', [PasswordConfirmationController::class, 'show'])->middleware('auth')->name('password.confirm');
 Route::post('/password-confirm', [PasswordConfirmationController::class, 'store'])->middleware('auth');
