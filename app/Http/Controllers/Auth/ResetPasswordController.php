@@ -18,20 +18,20 @@ class ResetPasswordController extends Controller
         return view('auth.resetPassword');
     }
 
-    public function store()
+    public function store(Request $request)
     {
 
-        request()->validate([
+        $request->validate([
             'token' => ['required'],
             'email' => ['required', 'email'],
             'password' => ['required', 'confirmed', 'min:5', 'max:32']
         ]);
 
         $status = Password::reset(
-            request()->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user) {
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user) use ($request) {
                 $user->forceFill([
-                    'password' => Hash::make(request()->password),
+                    'password' => Hash::make($request->password),
                     'remember_token' => Str::random(60)
                 ])->save();
             }

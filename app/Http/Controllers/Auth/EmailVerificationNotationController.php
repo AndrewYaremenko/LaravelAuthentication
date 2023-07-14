@@ -9,13 +9,13 @@ use Illuminate\Http\Request;
 
 class EmailVerificationNotationController extends Controller
 {
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        if (request()->user()->hasVerifiedEmail()) {
+        if ($request->user()->hasVerifiedEmail()) {
             return redirect()->intended(RouteServiceProvider::HOME);
         }
     
-        request()->user()->sendEmailVerificationNotification();
+        $request->user()->sendEmailVerificationNotification();
     
         return back()->with('status', 'Verification link sent!');
     }

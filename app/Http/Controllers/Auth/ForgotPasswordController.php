@@ -13,21 +13,21 @@ class ForgotPasswordController extends Controller
         return view('auth.forgotPassword');
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $validateData = request()->validate([
+        $validateData = $request->validate([
             'email' => ['required', 'email'],
         ]);
 
         $status = Password::sendResetLink(
-            request()->only('email')
+            $request->only('email')
         );
 
         if ($status === Password::RESET_LINK_SENT) {
             return back()->with('status', trans($status));
         }
 
-        return back()->withInput(request()->only('email'))
+        return back()->withInput($request->only('email'))
             ->withErrors(['email' => trans($status)]);
     }
 }

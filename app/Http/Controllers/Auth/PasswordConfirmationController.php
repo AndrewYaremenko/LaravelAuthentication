@@ -13,15 +13,15 @@ class PasswordConfirmationController extends Controller
         return view('auth.confirmPassword');
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        if (!Hash::check(request()->password, request()->user()->password)) {
+        if (!Hash::check($request->password, $request->user()->password)) {
             return back()->withErrors([
                 'password' => ['The provided password does not match our records.'],
             ]);
         }
 
-        request()->session()->passwordConfirmed();
+        $request->session()->passwordConfirmed();
 
         return redirect()->intended();
     }

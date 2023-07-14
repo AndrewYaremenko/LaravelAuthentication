@@ -8,8 +8,6 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,23 +23,54 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
 
-Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
-Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register');
-Route::get('/login', [LoginController::class, 'create'])->middleware('guest')->name('login');
-Route::post('/login', [LoginController::class, 'store'])->middleware('guest')->name('login');
-Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [RegisterController::class, 'create'])
+        ->name('register');
+    Route::post('/register', [RegisterController::class, 'store'])
+        ->name('register');
 
-Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])->middleware('guest')->name('password.request');
-Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])->middleware('guest')->name('password.request');
-Route::get('/reset-password', [ResetPasswordController::class, 'create'])->middleware('guest')->name('password.reset');
-Route::post('/reset-password', [ResetPasswordController::class, 'store'])->middleware('guest')->name('password.update');
+    Route::get('/login', [LoginController::class, 'create'])
+        ->name('login');
+    Route::post('/login', [LoginController::class, 'store'])
+        ->name('login');
 
-Route::get('/email/verify', [EmailVerificationPromtController::class, '__invoke'])->middleware('auth')->name('verification.notice');
-Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])->middleware(['auth', 'signed'])->name('verification.verify');
-Route::post('/email/verification-notification', [EmailVerificationNotationController::class, '__invoke'])->middleware('auth')->name('verification.send');
+    Route::get('/forgot-password', [ForgotPasswordController::class, 'create'])
+        ->name('password.request');
+    Route::post('/forgot-password', [ForgotPasswordController::class, 'store'])
+        ->name('password.request');
 
-Route::view('/news', 'news')->middleware(['auth', 'verified'])->name('news');
-Route::view('/profile', 'profile')->middleware(['auth', 'verified', 'password.confirm'])->name('profile');   
+    Route::get('/reset-password', [ResetPasswordController::class, 'create'])
+        ->name('password.reset');
+    Route::post('/reset-password', [ResetPasswordController::class, 'store'])
+        ->name('password.update');
+});
 
-Route::get('/password-confirm', [PasswordConfirmationController::class, 'show'])->middleware('auth')->name('password.confirm');
-Route::post('/password-confirm', [PasswordConfirmationController::class, 'store'])->middleware('auth');
+Route::middleware('auth')->group(function () {
+    Route::post('/logout', [LoginController::class, 'destroy'])
+        ->name('logout');
+
+    Route::get('/email/verify', [EmailVerificationPromtController::class, '__invoke'])
+        ->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [VerifyEmailController::class, '__invoke'])->middleware('signed')
+        ->name('verification.verify');
+    Route::post('/email/verification-notification', [EmailVerificationNotationController::class, '__invoke'])
+        ->name('verification.send');
+
+    Route::view('/news', 'news')->middleware('verified')
+        ->name('news');
+    Route::view('/profile', 'profile')->middleware(['verified', 'password.confirm'])
+        ->name('profile');
+
+    Route::get('/password-confirm', [PasswordConfirmationController::class, 'show'])
+        ->name('password.confirm');
+    Route::post('/password-confirm', [PasswordConfirmationController::class, 'store']);
+
+    Route::view('/news', 'news')->middleware('verified')
+        ->name('news');
+    Route::view('/profile', 'profile')->middleware(['verified', 'password.confirm'])
+        ->name('profile');
+
+    Route::get('/password-confirm', [PasswordConfirmationController::class, 'show'])
+        ->name('password.confirm');
+    Route::post('/password-confirm', [PasswordConfirmationController::class, 'store']);
+});
