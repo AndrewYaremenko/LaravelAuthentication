@@ -46,3 +46,4 @@ Route::get('/prifle', function () {
 })->middleware(['auth', 'verified', 'password.confirm'])->name('profile');   
 
 Route::get('/password-confirm', [PasswordConfirmationController::class, 'show'])->middleware('auth')->name('password.confirm');
+Route::post('/password-confirm', [PasswordConfirmationController::class, 'store'])->middleware('auth');

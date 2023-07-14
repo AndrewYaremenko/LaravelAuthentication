@@ -5,7 +5,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title text-center mb-4">Confirm Password</h5>
-                    <form action="{{ route('password.update') }}" method="POST">
+                    <form action="{{ route('password.confirm') }}" method="POST">
                         @csrf
                         <input type="hidden" name="token" value="{{ request('token') }}">
                         <div class="mb-3">
